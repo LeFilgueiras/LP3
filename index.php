@@ -1,4 +1,31 @@
+<style>
+
+	body {
+		font-family: Calibri;
+		background-color: OldLace;
+
+		max-width: 300px;
+		margin: auto;
+	}
+
+	div {
+		margin-bottom: 10px;
+		border: 1px solid LightGray;
+		background-color: white;
+		padding: 5px;
+	}
+
+	h1 { color: DarkOrange; }
+	h2 { color: DarkOrange; }
+
+	dt { font-weight: bold; }
+	dt::after { content: ":" }
+
+</style>
+
+
 <?php
+require_once('tabelacontatos.php');
 
 	$listaContatos = [];
 	$erros = [];
@@ -38,9 +65,11 @@
 	}
 
 
-    // PENDENTE: Consultar os contatos inseridos no banco de dados
-	// $listaContatos = ...;
+  // Consultar os contatos inseridos no banco de dados
+	$listaContatos = listaContatos();
 ?>
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -73,7 +102,7 @@
 				<dd><a href="mailto:<?= $contato['email'] ?>"><?= $contato['email'] ?></a></dd>
 
 				<dt>Aniversário</dt>
-				<dd><?= $contato['dataNasc'] ?></dd>
+				<dd><?= $contato['datanasc'] ?></dd>
 			</dl>
 		</div>
 	<?php } ?>
