@@ -22,4 +22,18 @@
           return $resultado->fetchAll();
       }
 
+      function InsereUsuário($dadosNovoContato)
+      {
+        $bd = CriaConexãoBD();
+
+        $sql->$bd->prepare
+          ("INSERT INTO contatos (nome, tel, email, dataNasc) VALUES (:valnome, :valtel, :valemail, :valdataNasc);");
+
+        $sql->bindValue(':valnome', $dadosNovoContato['nome']);
+        $sql->bindValue(':valtel', $dadosNovoContato['tel']);
+        $sql->bindValue(':valemail', $dadosNovoContato['email']);
+        $sql->bindValue(':valdataNasc', $dadosNovoContato['dataNasc']);
+
+        $sql->execute();
+      }
 ?>
