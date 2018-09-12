@@ -1,123 +1,43 @@
-<style>
-
-	body {
-		font-family: Calibri;
-		background-color: OldLace;
-
-		max-width: 300px;
-		margin: auto;
-	}
-
-	div {
-		margin-bottom: 10px;
-		border: 1px solid LightGray;
-		background-color: white;
-		padding: 5px;
-	}
-
-	h1 { color: DarkOrange; }
-	h2 { color: DarkOrange; }
-
-	dt { font-weight: bold; }
-	dt::after { content: ":" }
-
-</style>
-
-
-<?php
-require_once('tabelacontatos.php');
-
-	$listaContatos = [];
-	$erros = [];
-
-	if (! empty($_REQUEST)) {
-		$req = array_map('trim', $_REQUEST);
-		$req = filter_var_array(
-			$req,
-			[
-				'nome' => [ 'filter' => FILTER_VALIDATE_REGEXP,
-				            'options' => [ 'regexp' => '/^[\p{L}\p{Mn}\p{Pd}\'\s]{3,255}$/u' ] ],
-				'tel' => [ 'filter' => FILTER_VALIDATE_REGEXP,
-				           'options' => [ 'regexp' => '/^(\d{3}-\d{3}-\d{3}$|^\d{4}-\d{4})$/' ] ],
-				'email' => FILTER_VALIDATE_EMAIL,
-				'dataNasc' => [ 'filter' => FILTER_VALIDATE_REGEXP,
-				                'options' => [ 'regexp' => '/^\d{4}-\d{2}-\d{2}$/' ] ],
-			]
-		);
-
-		foreach ($req as $campo => $valor)
-		{
-			if ($valor == false)
-				$erros[] = "Campo $campo inválido";
-		}
-
-		if (empty($erros))
-		{
-			$novoContato = [
-				'nome' => $req['nome'],
-				'tel' => $req['tel'],
-				'email' => $req['email'],
-				'dataNasc' => $req['dataNasc']
-			];
-
-			// PENDENTE: Inserir novo contato no banco de dados
-		}
-	}
-
-
-  // Consultar os contatos inseridos no banco de dados
-	$listaContatos = listaContatos();
-?>
-
-
 <!DOCTYPE html>
-<html lang="pt-BR">
+
+<html lang="pt-br">
 <head>
-	<meta charset="utf-8"/>
-	<title>Agenda de contatos</title>
-	<link rel="stylesheet" type="text/css" href="<?= basename(__FILE__, '.php') . '.css' ?>"/>
+ <meta charset="utf-8"/>
+ <title>InstaCPII</title>
 </head>
 <body>
-	<h1>Agenda de contatos</h1>
 
-	<?php if (empty($erros) == false) { ?>
-		<p style="background-color: LightRed">
-			Erro ao inserir o contato:
-			<ul>
-				<?php foreach ($erros as $e) { ?>
-					<li><?= $e ?></li>
-				<?php } ?>
-			</ul>
-		</p>
-	<?php } ?>
+ <h1>InstaCPII</h1>
 
-	<?php foreach ($listaContatos as $contato) { ?>
-		<div>
-			<h2><?= $contato['nome'] ?></h2>
-			<dl>
-				<dt>Tel.</dt>
-				<dd><?= $contato['tel'] ?></dd>
+ <!-- TODO: Formulário de login -->
 
-				<dt>E-mail</dt>
-				<dd><a href="mailto:<?= $contato['email'] ?>"><?= $contato['email'] ?></a></dd>
+ <form method="POST" action="Controlador/Usuário/CadastroUsuario.php" novalidate>
+   <input name="nome" type="text" placeholder="Nome" minlength=3 maxlength=12 required/>
+   <input name="sobrenome" type="text" placeholder="Sobrenome"minlength=3 maxlength=12 required/><br/>
 
-				<dt>Aniversário</dt>
-				<dd><?= $contato['datanasc'] ?></dd>
-			</dl>
-		</div>
-	<?php } ?>
+   <input name="email" type="email" placeholder="E-Mail" required /><br/>
 
-	<?php if (empty($listaContatos)) { ?>
-		<p style="color: Gray">Agenda vazia</p>
-	<?php } ?>
+   <input name="senha" type="password" placeholder="Senha" minlength=6 maxlength=12  required/><br/>
 
-	<h1>Adicionar contato</h1>
-	<form method="POST">
-		<label>Nome: <input name="nome" required type="text"/></label><br/>
-		<label>Tel.: <input name="tel" type="tel"/></label><br/>
-		<label>E-Mail: <input name="email" type="email"/></label><br/>
-		<label>Data Nasc.: <input name="dataNasc" type="date"/></label><br/>
-		<input type="submit" value="Adicionar"/>
-	</form>
+   <input name="confirmaSenha" type="password" placeholder="Confirmar senha" minlength=6 maxlength=12 required/><br/>
+
+   <label>Data de nascimento: <input name="dataNasc" type="date" required/></label><br/>
+
+   <label>
+     Quem pode ver as suas publicações?
+     <select name="visibilidadePublicações">
+       <option value="" disabled>Selecione</option>
+       <option value="1">Amigos</option>
+       <option value="2">Amigos de amigos</option>
+       <option value="3">Todos</option>
+     </select>
+   </label><br/>
+
+   <label><input name="alertasEmail" type="checkbox" />Receber alertas por e-mail.</label><br/>
+
+   <label><input name="aceitaTermos" type="checkbox" required />Li e concordo com os termos de uso e com a política de privacidade.</label><br/>
+
+   <input type="submit" value="Cadastrar"/>
+ </form>
 </body>
 </html>
