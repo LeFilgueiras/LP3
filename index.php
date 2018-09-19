@@ -1,43 +1,49 @@
-<!DOCTYPE html>
+<?php
+ session_start();
+ //if (empty($SESS))
+ if(array_key_exists('erroLogin' , $_SESSION))
+ {
+ $erro=$_SESSION['errologin'];
+ }
+ else{
+	 $erro= null;
+ }
+ ?>
 
+<!-- PENDENTE: Se o usuário já estiver logado, redirecioná-lo para a página de pedidos -->
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
- <meta charset="utf-8"/>
- <title>InstaCPII</title>
+	<meta charset="utf-8"/>
+	<title>Livraria CPII - Identificar-se</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 </head>
 <body>
+	<div class="container">
+			<nav class="navbar navbar-dark bg-dark">
+				<h1 class="navbar-brand">Livraria CPII</h1>
+			</nav>
 
- <h1>InstaCPII</h1>
+		<h1>Bem-vindo à Livraria CPII</h1>
+		<p>Por favor, identifique-se:</p>
 
- <!-- TODO: Formulário de login -->
+<?php if ($erro!=null){ ?>
+	<div class="alert alert-warning">
+		<p>Erro: <?= $erro ?> </p>
+</div>
 
- <form method="POST" action="Controlador/Usuário/CadastroUsuario.php" novalidate>
-   <input name="nome" type="text" placeholder="Nome" minlength=3 maxlength=12 required/>
-   <input name="sobrenome" type="text" placeholder="Sobrenome"minlength=3 maxlength=12 required/><br/>
+<?php } ?>
 
-   <input name="email" type="email" placeholder="E-Mail" required /><br/>
 
-   <input name="senha" type="password" placeholder="Senha" minlength=6 maxlength=12  required/><br/>
-
-   <input name="confirmaSenha" type="password" placeholder="Confirmar senha" minlength=6 maxlength=12 required/><br/>
-
-   <label>Data de nascimento: <input name="dataNasc" type="date" required/></label><br/>
-
-   <label>
-     Quem pode ver as suas publicações?
-     <select name="visibilidadePublicações">
-       <option value="" disabled>Selecione</option>
-       <option value="1">Amigos</option>
-       <option value="2">Amigos de amigos</option>
-       <option value="3">Todos</option>
-     </select>
-   </label><br/>
-
-   <label><input name="alertasEmail" type="checkbox" />Receber alertas por e-mail.</label><br/>
-
-   <label><input name="aceitaTermos" type="checkbox" required />Li e concordo com os termos de uso e com a política de privacidade.</label><br/>
-
-   <input type="submit" value="Cadastrar"/>
- </form>
+		<form method="POST" action="Controladores/entrar.php">
+			<div class="form-group">
+				<label>E-mail: <input name="email" type="email" required placeholder="jpsilva@example.net" class="form-control"/></label>
+			</div>
+			<div class="form-group">
+				<label>Senha: <input name="senha" type="password" required minlength="6" maxlength="12" placeholder="******" class="form-control"/></label>
+			</div>
+			<input type="submit" value="Entrar"/>
+		</form>
+	</div>
 </body>
 </html>
